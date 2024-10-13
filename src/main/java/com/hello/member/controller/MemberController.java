@@ -2,6 +2,7 @@ package com.hello.member.controller;
 
 import com.hello.member.dto.MemberDTO;
 import com.hello.member.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,28 @@ public class MemberController {
 
         memberService.save(memberDTO);
 
-        return "index";
+        return "login";
+    }
+
+    @GetMapping("/member/login")
+    public String loginForm() {
+        return "login";
+    }
+
+    @PostMapping("/member/login")
+    public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
+        MemberDTO loginResult = memberService.login(memberDTO);
+
+        if (loginResult != null) {
+            //로그인 성공
+            //로그인한 사용자의 이메일 정보를 세션에 담음
+            session.setAttribute("loginEmail", loginResult.getMemberEmail());
+
+            return "main";
+        }
+        else {
+            //로그인 실패
+            return "login";
+        }
     }
 }
