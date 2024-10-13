@@ -3,8 +3,10 @@ package com.hello.member.controller;
 import com.hello.member.dto.MemberDTO;
 import com.hello.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,5 +60,15 @@ public class MemberController {
             //로그인 실패
             return "login";
         }
+    }
+
+    @GetMapping("/member/")
+    public String findAll(Model model) {
+        List<MemberDTO> memberDTOList = memberService.findAll();
+
+        //특정 html로 가져가야하는 데이터가 있다면 org.springframework.ui.Model 사용. (가져가는 방법 중 가장 기초적인 방식)
+        model.addAttribute("memberList", memberDTOList);
+
+        return "list";
     }
 }

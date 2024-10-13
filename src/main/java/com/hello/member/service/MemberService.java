@@ -3,6 +3,8 @@ package com.hello.member.service;
 import com.hello.member.dto.MemberDTO;
 import com.hello.member.entity.MemberEntity;
 import com.hello.member.repository.MemberRepository;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,5 +48,16 @@ public class MemberService {
             //조회 결과 -> 해당 이메일을 가진 회원이 없다.
             return null;
         }
+    }
+
+    public List<MemberDTO> findAll() {
+        List<MemberEntity> memberEntityList = memberRepository.findAll();
+        List<MemberDTO> memberDTOList = new ArrayList<>();
+
+        for (MemberEntity memberEntity : memberEntityList) {
+            memberDTOList.add(MemberDTO.toMemberDTO(memberEntity));
+        }
+
+        return memberDTOList;
     }
 }
