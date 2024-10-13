@@ -23,9 +23,10 @@
     <td>
       <!-- query string /member?id=1
           rest api /member/1 -->
-      <a th:href="@{|/member/${member.id}|}">조회</a>
+      <a th:href="@{|/member/${member.id}|}">조회</a> <!-- @{| |}: 가져온 값 그대로 주소에 찍기 -->
     </td>
     <td>
+      <!-- 제대로된 rest api 구현은 조회와 삭제 주소가 동일해야함. -->
       <a th:href="@{|/member/delete/${member.id}|}">삭제</a>
     </td>
   </tr>
