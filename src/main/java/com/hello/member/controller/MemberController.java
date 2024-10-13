@@ -81,4 +81,23 @@ public class MemberController {
 
         return "detail";
     }
+
+    @GetMapping("/member/update")
+    public String updateForm(HttpSession session, Model model) {
+        //로그인 정보가 세션에 있기 때문에 정보를 세션으로부터 가져온다.
+        String myEmail = (String) session.getAttribute("loginEmail");
+
+        MemberDTO memberDTO = memberService.updateForm(myEmail);
+
+        model.addAttribute("updateMember", memberDTO);
+
+        return "update";
+    }
+
+    @PostMapping("/member/update")
+    public String update(@ModelAttribute MemberDTO memberDTO) {
+        memberService.update(memberDTO);
+
+        return "redirect:/member/" + memberDTO.getId();
+    }
 }
