@@ -3,15 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>save</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+          crossorigin="anonymous"></script>
 </head>
 <body>
 <!-- action 속성: form의 데이터를 어디로 보낼지 지정 -->
 <form action="/member/save" method="post">
   <!-- name 속성: 서버로 전송할 때 변수 이름의 역할 -->
-  이메일: <input type="text" name="memberEmail"> <br>
+  <!-- onblur: 해당 요소를 벗어나면 이벤트 호출 -->
+  이메일: <input type="text" name="memberEmail" id="memberEmail" onblur="emailCheck()"> <br>
+  <p id="check-result"></p>
   비밀번호: <input type="password" name="memberPassword"> <br>
   이름: <input type="text" name="memberName"> <br>
   <input type="submit" value="회원가입">
 </form>
+<script th:inline="javascript">
+  //ajax 이메일 중복 검증
+  const emailCheck = () => {
+    const email = document.getElementById("memberEmail").value;
+    const checkResult = document.getElementById("check-result");
+
+    console.log("입력값: " + email);
+
+    $.ajax({
+      //POST, url: "email-check", data: email
+      type: "post",
+      url: "/member/email-check",
+      data: {
+        //파라미터명: 실제 데이터
+        "memberEmail": email
+      },
+      success: function (result) {
+        console.log("요청 성공", result);
+
+        if (result === "ok") {
+          console.log("사용가능한 이메일");
+          checkResult.style.color = "green";
+          checkResult.innerHTML = "사용가능한 이메일";
+        } else {
+          console.log("이미 사용중인 이메일");
+          checkResult.style.color = "red";
+          checkResult.innerHTML = "이미 사용중인 이메일";
+        }
+      },
+      error: function (error) {
+        console.log(error);
+      }
+    });
+  }
+</script>
 </body>
 </html>

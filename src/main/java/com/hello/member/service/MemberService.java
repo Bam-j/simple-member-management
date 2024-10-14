@@ -76,8 +76,7 @@ public class MemberService {
 
         if (optionalMemberEntity.isPresent()) {
             return MemberDTO.toMemberDTO(optionalMemberEntity.get());
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -89,5 +88,17 @@ public class MemberService {
 
     public void deleteById(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    public String emailCheck(String memberEmail) {
+        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(memberEmail);
+
+        if (byMemberEmail.isPresent()) {
+            //조회결과가 있다 -> 이메일 중복
+            return null;
+        } else {
+            //조회결과가 없다 -> 이메일 사용 가능
+            return "ok";
+        }
     }
 }

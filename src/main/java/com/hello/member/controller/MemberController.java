@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
+
     //생성자 주입
     private final MemberService memberService;
 
@@ -56,8 +58,7 @@ public class MemberController {
             session.setAttribute("loginEmail", loginResult.getMemberEmail());
 
             return "main";
-        }
-        else {
+        } else {
             //로그인 실패
             return "login";
         }
@@ -112,5 +113,18 @@ public class MemberController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "index";
+    }
+
+    @PostMapping("/member/email-check")
+    public @ResponseBody String emailCheck(@RequestParam(name = "memberEmail") String memberEmail) {
+        System.out.println("memberEmail = " + memberEmail);
+
+        String checkResult = memberService.emailCheck(memberEmail);
+
+        if (checkResult != null) {
+            return "ok";
+        } else {
+            return "no";
+        }
     }
 }
